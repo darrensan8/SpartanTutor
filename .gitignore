@@ -1,0 +1,21 @@
+# Compiled files
+target/
+*.class
+
+# IDE files
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Maven wrapper
+.mvn/
+mvnw
+mvnw.cmd
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

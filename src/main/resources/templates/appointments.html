@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Appointments - SJSU Tutoring</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: white; }
+        .header h1 { font-size: 1.5rem; font-weight: normal; }
+        .main { background: #707070; min-height: 80vh; padding: 32px; }
+        .main h2 { color: #E5A823; font-size: 1.5rem; margin-bottom: 24px; font-weight: bold; }
+        .card { background: white; padding: 24px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 12px 16px; font-size: 1.1rem; font-weight: normal; border-bottom: 1px solid #ccc; }
+        td { padding: 16px; border-bottom: 1px solid #eee; }
+        .no-appts { padding: 16px; color: #555; }
+        .status-confirmed { color: green; font-weight: bold; }
+        .footer { background: #C8C8C8; padding: 16px 24px; display: flex; gap: 16px; }
+        .btn-footer { background: #C0C0C0; border: none; padding: 10px 24px; font-size: 1rem; cursor: pointer; }
+        .btn-home { background: #0055A2; color: white; text-decoration: none; padding: 10px 20px;
+                    display: inline-block; margin-bottom: 20px; font-size: 0.95rem; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SJSU Tutoring System</h1>
+    </div>
+    <div class="main">
+        <h2>My Appointments</h2>
+        <a href="/" class="btn-home">&#8592; Back to Home</a>
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Appointment ID</th>
+                        <th>Tutor</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Student</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${#lists.isEmpty(appointments)}">
+                        <td colspan="7" class="no-appts">No appointments booked yet.</td>
+                    </tr>
+                    <tr th:each="appt : ${appointments}">
+                        <td th:text="${appt.appointmentId}"></td>
+                        <td th:text="${appt.tutorName}"></td>
+                        <td th:text="${appt.subject}"></td>
+                        <td th:text="${appt.date}"></td>
+                        <td th:text="${appt.time}"></td>
+                        <td th:text="${appt.studentName}"></td>
+                        <td class="status-confirmed" th:text="${appt.status}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="footer">
+        <button class="btn-footer">Contact</button>
+        <button class="btn-footer">About</button>
+    </div>
+</body>
+</html>

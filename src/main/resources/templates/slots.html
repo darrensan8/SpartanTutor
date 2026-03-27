@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Available Slots - SJSU Tutoring</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: white; }
+        .header h1 { font-size: 1.5rem; font-weight: normal; }
+        .header img { height: 48px; }
+        .main { background: #707070; min-height: 80vh; padding: 32px; }
+        .main h2 { color: #E5A823; font-size: 1.5rem; margin-bottom: 24px; font-weight: bold; }
+        .card { background: white; padding: 24px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 12px 16px; font-size: 1.1rem; font-weight: normal; border-bottom: 1px solid #ccc; }
+        td { padding: 16px; border-bottom: 1px solid #eee; }
+        .btn-book { background: #0055A2; color: white; border: none; padding: 8px 20px; font-size: 1rem; cursor: pointer; }
+        .no-slots { padding: 16px; color: #555; }
+        .footer { background: #C8C8C8; padding: 16px 24px; display: flex; gap: 16px; }
+        .btn-footer { background: #C0C0C0; border: none; padding: 10px 24px; font-size: 1rem; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SJSU Tutoring System</h1>
+    </div>
+    <div class="main">
+        <h2>Available Tutoring Slots</h2>
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tutor</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Duration</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${#lists.isEmpty(slots)}">
+                        <td colspan="6" class="no-slots">No available slots at this time.</td>
+                    </tr>
+                    <tr th:each="slot : ${slots}">
+                        <td th:text="${slot.tutorName}"></td>
+                        <td th:text="${slot.subject}"></td>
+                        <td th:text="${slot.date}"></td>
+                        <td th:text="${slot.time}"></td>
+                        <td th:text="${slot.durationMinutes} + ' minutes'"></td>
+                        <td>
+                            <a th:href="@{/book/{id}(id=${slot.slotId})}">
+                                <button class="btn-book">Book</button>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="footer">
+        <button class="btn-footer">Contact</button>
+        <button class="btn-footer">About</button>
+    </div>
+</body>
+</html>

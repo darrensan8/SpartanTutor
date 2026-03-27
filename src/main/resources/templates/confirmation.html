@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Appointment Confirmed - SJSU Tutoring</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: white; }
+        .header h1 { font-size: 1.5rem; font-weight: normal; }
+        .main { background: #707070; min-height: 80vh; padding: 32px; }
+        .main h2 { color: #E5A823; font-size: 1.5rem; margin-bottom: 24px; font-weight: bold; }
+        .cards { display: flex; gap: 24px; }
+        .card { background: white; padding: 24px; flex: 1; }
+        .card h3 { border-bottom: 2px solid #999; padding-bottom: 8px; margin-bottom: 16px; font-weight: normal; font-size: 1.1rem; }
+        .card p { margin-bottom: 12px; font-size: 1rem; }
+        .apmt-id { font-size: 1.3rem; font-weight: bold; text-align: center; margin: 16px 0; }
+        .btn-blue { display: block; background: #0055A2; color: white; text-decoration: none;
+                    text-align: center; padding: 20px; font-size: 1.1rem; margin-top: 16px; }
+        .footer { background: #C8C8C8; padding: 16px 24px; display: flex; gap: 16px; }
+        .btn-footer { background: #C0C0C0; border: none; padding: 10px 24px; font-size: 1rem; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SJSU Tutoring System</h1>
+    </div>
+    <div class="main">
+        <h2>Your Appointment is Confirmed!</h2>
+        <div class="cards">
+            <div class="card">
+                <h3>Booking Information</h3>
+                <p>Tutor: <span th:text="${appointment.tutorName}"></span></p>
+                <p>Subject: <span th:text="${appointment.subject}"></span></p>
+                <p>Date: <span th:text="${appointment.date}"></span></p>
+                <p>Time: <span th:text="${appointment.time}"></span></p>
+                <p>Duration: <span th:text="${appointment.durationMinutes} + ' minutes'"></span></p>
+            </div>
+            <div class="card">
+                <p>Appointment ID:</p>
+                <p class="apmt-id" th:text="${appointment.appointmentId}"></p>
+                <a href="/" class="btn-blue">Return to Homepage</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <button class="btn-footer">Contact</button>
+        <button class="btn-footer">About</button>
+    </div>
+</body>
+</html>

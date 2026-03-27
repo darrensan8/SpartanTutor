@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SJSU Tutoring System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: white; }
+        .header h1 { font-size: 1.5rem; font-weight: normal; }
+        .btn-login { background: #0055A2; color: white; border: none; padding: 10px 20px; font-size: 1rem; cursor: pointer; }
+        .main { background: #707070; min-height: 80vh; padding: 40px 32px; }
+        .main h2 { color: #E5A823; font-size: 1.6rem; margin-bottom: 40px; }
+        .btn-gold { display: inline-block; background: #E5A823; color: white; text-decoration: none;
+                    padding: 24px 32px; font-size: 1.1rem; width: 320px; margin-bottom: 16px; }
+        .footer { background: #C8C8C8; padding: 16px 24px; display: flex; gap: 16px; }
+        .btn-footer { background: #C0C0C0; border: none; padding: 10px 24px; font-size: 1rem; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SJSU Tutoring System</h1>
+        <button class="btn-login">Login / Sign up</button>
+    </div>
+    <div class="main">
+        <h2>Welcome all to SJSU's tutoring service</h2>
+        <div>
+            <a href="/slots" class="btn-gold">View available time slots</a>
+        </div>
+        <div>
+            <a href="/appointments" class="btn-gold">View my appointments</a>
+        </div>
+    </div>
+    <div class="footer">
+        <button class="btn-footer">Contact</button>
+        <button class="btn-footer">About</button>
+    </div>
+</body>
+</html>
