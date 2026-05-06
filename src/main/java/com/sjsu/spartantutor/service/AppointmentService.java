@@ -23,12 +23,10 @@ public class AppointmentService {
     private int totalBookings = 0;
 
     private final AppointmentRepository appointmentRepo;
-    private final TimeSlotRepository slotRepo;
     private final BookingTransactionService bookingTransactionService;
 
     public AppointmentService(AppointmentRepository appointmentRepo, TimeSlotRepository slotRepo, BookingTransactionService bookingTransactionService) {
         this.appointmentRepo = appointmentRepo;
-        this.slotRepo = slotRepo;
         this.bookingTransactionService = bookingTransactionService;
     }
 
