@@ -19,6 +19,9 @@ public class AppointmentService {
     private static final int MAX_RETRIES = 3;
     private static final int INITIAL_BACKOFF_MS = 100;
 
+    private int failedBookings = 0;
+    private int totalBookings = 0;
+
     private final AppointmentRepository appointmentRepo;
     private final TimeSlotRepository slotRepo;
     private final BookingTransactionService bookingTransactionService;
@@ -30,12 +33,14 @@ public class AppointmentService {
     }
 
     public Appointment book(Long slotId, String studentName, String studentId, String notes) {
+        totalBookings++;
         for (int attempt = 0; attempt < MAX_RETRIES; attempt++) {
             try {
                 return bookingTransactionService.attemptBooking(slotId, studentName, studentId, notes);
             } catch (CannotAcquireLockException e) {
                 log.warn("Lock conflict on slot {}. Attempt {}/{}", slotId, attempt + 1, MAX_RETRIES);
                 if (attempt == MAX_RETRIES - 1) {
+                    failedBookings++;
                     log.error("Booking failed after {} retries. SlotID={}", MAX_RETRIES, slotId);
                     throw new IllegalStateException("System busy. Please try again.");
                 }
