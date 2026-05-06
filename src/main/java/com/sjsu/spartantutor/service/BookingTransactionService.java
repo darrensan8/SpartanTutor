@@ -17,11 +17,15 @@ public class BookingTransactionService {
 
     private final AppointmentRepository appointmentRepo;
     private final TimeSlotRepository slotRepo;
+    private final NotificationClient notificationClient;
 
     public BookingTransactionService(AppointmentRepository appointmentRepo,
-                                     TimeSlotRepository slotRepo) {
+                                     TimeSlotRepository slotRepo,
+                                     NotificationClient notificationClient) {
         this.appointmentRepo = appointmentRepo;
         this.slotRepo = slotRepo;
+        this.notificationClient = notificationClient;
+
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -48,6 +52,15 @@ public class BookingTransactionService {
 
         slotRepo.markBooked(slotId);
         Appointment saved = appointmentRepo.save(appointment);
+
+        notificationClient.sendBookingConfirmation(
+                studentId + "@sjsu.edu",
+                slot.getTutorName(),
+                slot.getSubject(),
+                slot.getDate(),
+                slot.getTime()
+        );
+
 
         log.info("Booking created. AppointmentID={}, SlotID={}, Student={}",
                 saved.getAppointmentId(), slotId, studentName);
