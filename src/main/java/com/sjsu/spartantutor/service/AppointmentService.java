@@ -24,10 +24,12 @@ public class AppointmentService {
 
     private final AppointmentRepository appointmentRepo;
     private final BookingTransactionService bookingTransactionService;
+    private final TimeSlotRepository slotRepo;
 
     public AppointmentService(AppointmentRepository appointmentRepo, TimeSlotRepository slotRepo, BookingTransactionService bookingTransactionService) {
         this.appointmentRepo = appointmentRepo;
         this.bookingTransactionService = bookingTransactionService;
+        this.slotRepo = slotRepo;
     }
 
     public Appointment book(Long slotId, String studentName, String studentId, String notes) {
@@ -51,6 +53,14 @@ public class AppointmentService {
             }
         }
         throw new IllegalStateException("Booking could not be completed.");
+    }
+
+    public void cancel(String appointmentId) {
+        appointmentRepo.findById(appointmentId).ifPresent(apt -> {
+            slotRepo.markAvailable(apt.getSlotId());
+        });
+        appointmentRepo.cancel(appointmentId);
+        log.info("Appointment {} cancelled", appointmentId);
     }
 
     public List<Appointment> getAllAppointments() {

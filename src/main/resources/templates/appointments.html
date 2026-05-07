@@ -39,6 +39,7 @@
                         <th>Time</th>
                         <th>Student</th>
                         <th>Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,6 +54,15 @@
                         <td th:text="${appt.time}"></td>
                         <td th:text="${appt.studentName}"></td>
                         <td class="status-confirmed" th:text="${appt.status}"></td>
+                        <td>
+                            <form th:action="@{/cancel/{id}(id=${appt.appointmentId})}" method="post">
+                                <button type="submit"
+                                        style="background:#c0392b;color:white;border:none;padding:6px 14px;cursor:pointer;"
+                                        th:disabled="${appt.status == 'cancelled'}">
+                                    Cancel
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 </tbody>
             </table>

@@ -48,4 +48,11 @@ public class AppointmentController {
         model.addAttribute("appointment", appt);
         return "confirmation";
     }
+
+    @PostMapping("/cancel/{appointmentId}")
+    public String cancelAppointment(@PathVariable String appointmentId) {
+        appointmentService.cancel(appointmentId);
+        return "redirect:/appointments";
+    }
+
 }

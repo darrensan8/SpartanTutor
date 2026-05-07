@@ -3,76 +3,70 @@ package com.sjsu.spartantutor.repository;
 import com.sjsu.spartantutor.model.TimeSlot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
+import java.sql.SQLDataException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.ReentrantLock;
 
 @Repository
 public class TimeSlotRepository {
 
     private static final Logger log = LoggerFactory.getLogger(TimeSlotRepository.class);
 
-    private final Map<Long, TimeSlot> store = new ConcurrentHashMap<>();
-    private final Map<Long, ReentrantLock> locks = new ConcurrentHashMap<>();
+    private final JdbcTemplate jdbc;
 
-    public TimeSlotRepository() {
-        store.put(1L, new TimeSlot(1L, "Khang Tran",  "CS146", "03/24/26", "2:30pm", 45));
-        store.put(2L, new TimeSlot(2L, "Kaitlyn Tam", "CS146", "03/24/26", "2:30pm", 45));
-        store.put(3L, new TimeSlot(3L, "Jacob Dinh",  "CS146", "03/24/26", "2:30pm", 45));
-        store.keySet().forEach(id -> locks.put(id, new ReentrantLock()));
-        log.info("TimeSlotRepository initialized with {} seed slots", store.size());
+    public TimeSlotRepository(JdbcTemplate jdbc) {
+        this.jdbc = jdbc;
     }
 
     public List<TimeSlot> findAvailable() {
-        List<TimeSlot> available = new ArrayList<>();
-        for (TimeSlot s : store.values()) {
-            if ("available".equals(s.getStatus())) {
-                available.add(s);
-            }
-        }
-        return available;
+        String sql = "SELECT * FROM time_slot WHERE status = 'available'";
+        return jdbc.query(sql, new TimeSlotRowMapper());
     }
 
     public Optional<TimeSlot> findById(Long slotId) {
-        return Optional.ofNullable(store.get(slotId));
+        String sql = "SELECT * FROM time_slot WHERE slot_id = ?";
+        List<TimeSlot> results = jdbc.query(sql, new TimeSlotRowMapper(), slotId);
+        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
     }
 
     public Optional<TimeSlot> findByIdWithLock(Long slotId) {
-        ReentrantLock lock = locks.get(slotId);
-        if (lock == null) return Optional.empty();
-
-        boolean acquired = lock.tryLock();
-        if (!acquired) {
-            log.warn("Could not acquire lock on slot {}", slotId);
-            throw new org.springframework.dao.CannotAcquireLockException("Slot " + slotId + " is locked");
-        }
-
-        log.info("Lock acquired on slot {}", slotId);
-        return Optional.ofNullable(store.get(slotId));
+        String sql = "SELECT * FROM time_slot WHERE slot_id = ? FOR UPDATE";
+        log.info("Acquiring lock on slot {}", slotId);
+        List<TimeSlot> results = jdbc.query(sql, new TimeSlotRowMapper(), slotId);
+        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
     }
 
     public void markBooked(Long slotId) {
-        TimeSlot slot = store.get(slotId);
-        if (slot != null) {
-            slot.setStatus("booked");
-            log.info("Slot {} marked as booked", slotId);
-        }
-        ReentrantLock lock = locks.get(slotId);
-        if (lock != null && lock.isHeldByCurrentThread()) {
-            lock.unlock();
-            log.info("Lock released on slot {}", slotId);
+        String sql = "UPDATE time_slot SET status = 'booked' WHERE slot_id = ?";
+        jdbc.update(sql, slotId);
+        log.info("Slot {} marked as booked", slotId);
+    }
+
+    private static class TimeSlotRowMapper implements RowMapper<TimeSlot> {
+        @Override
+        public TimeSlot mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new TimeSlot(
+                    rs.getLong("slot_id"),
+                    rs.getString("tutor_name"),
+                    rs.getString("subject"),
+                    rs.getString("date"),
+                    rs.getString("time"),
+                    rs.getInt("duration_minutes")
+            );
+
         }
     }
-    public void releaseLock(Long slotId) {
-        ReentrantLock lock = locks.get(slotId);
-        if (lock != null && lock.isHeldByCurrentThread()) {
-            lock.unlock();
-        }
+
+    public void markAvailable(Long slotId) {
+        String sql = "UPDATE time_slot SET status = 'available' WHERE slot_id = ?";
+        jdbc.update(sql, slotId);
+        log.info("Slot {} marked as available", slotId);
     }
 
 }
