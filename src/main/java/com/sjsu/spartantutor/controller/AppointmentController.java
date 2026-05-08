@@ -25,7 +25,7 @@ public class AppointmentController {
 
     @GetMapping("/appointments")
     public String viewAppointments(Model model) {
-        model.addAttribute("appointments", appointmentService.getUpcomingAppointments());
+        model.addAttribute("upcoming", appointmentService.getUpcomingAppointments());
         model.addAttribute("past", appointmentService.getPastAppointments());
         return "appointments";
     }
