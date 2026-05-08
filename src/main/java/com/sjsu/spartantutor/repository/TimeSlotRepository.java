@@ -76,4 +76,14 @@ public class TimeSlotRepository {
         log.info("New slot added for tutor {}", tutorName);
     }
 
+    public void deleteSlot(Long slotId) {
+        jdbc.update("DELETE FROM appointment WHERE slot_id = ?", slotId);
+        jdbc.update("DELETE FROM time_slot WHERE slot_id = ? AND status = 'available'", slotId);
+        log.info("Slot {} and its appointment records deleted", slotId);
+    }
+
+    public List<TimeSlot> findAll() {
+        String sql = "SELECT * FROM time_slot ORDER BY slot_id";
+        return jdbc.query(sql, new TimeSlotRowMapper());
+    }
 }

@@ -27,4 +27,12 @@ public class TimeSlotService {
     public void addSlot(String tutorName, String subject, String date, String time, int durationMinutes) {
         repo.addSlot(tutorName, subject, date, time, durationMinutes);
     }
+
+    public void deleteSlot(Long slotId) {
+        repo.deleteSlot(slotId);
+    }
+
+    public List<TimeSlot> getAllSlots() {
+        return repo.findAll();
+    }
 }
