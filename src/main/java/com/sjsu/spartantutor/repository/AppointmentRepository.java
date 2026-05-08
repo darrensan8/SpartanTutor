@@ -94,4 +94,14 @@ public class AppointmentRepository {
         }
     }
 
+    public List<Appointment> findConfirmed() {
+        String sql = "SELECT * FROM appointment WHERE status = 'confirmed'";
+        return jdbc.query(sql, new AppointmentRowMapper());
+    }
+
+    public List<Appointment> findCancelled() {
+        String sql = "SELECT * FROM appointment WHERE status = 'cancelled'";
+        return jdbc.query(sql, new AppointmentRowMapper());
+    }
+
 }

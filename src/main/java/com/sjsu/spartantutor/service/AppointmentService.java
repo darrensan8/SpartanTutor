@@ -70,4 +70,13 @@ public class AppointmentService {
     public Optional<Appointment> getById(String appointmentId) {
         return appointmentRepo.findById(appointmentId);
     }
+
+    public List<Appointment> getUpcomingAppointments() {
+        return appointmentRepo.findConfirmed();
+    }
+
+    public List<Appointment> getPastAppointments() {
+        return appointmentRepo.findCancelled();
+    }
+
 }
