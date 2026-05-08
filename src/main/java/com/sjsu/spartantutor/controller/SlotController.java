@@ -4,6 +4,8 @@ import com.sjsu.spartantutor.service.TimeSlotService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class SlotController {
@@ -18,5 +20,20 @@ public class SlotController {
     public String viewSlots(Model model) {
         model.addAttribute("slots", slotService.getAvailableSlots());
         return "slots";
+    }
+
+    @GetMapping("/provider")
+    public String providerPage() {
+        return "provider";
+    }
+
+    @PostMapping("/provider/add")
+    public String addSlot(@RequestParam String tutorName,
+                          @RequestParam String subject,
+                          @RequestParam String date,
+                          @RequestParam String time,
+                          @RequestParam int durationMinutes) {
+        slotService.addSlot(tutorName, subject, date, time, durationMinutes);
+        return "redirect:/slots";
     }
 }

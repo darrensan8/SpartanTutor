@@ -69,4 +69,11 @@ public class TimeSlotRepository {
         log.info("Slot {} marked as available", slotId);
     }
 
+    public void addSlot(String tutorName, String subject, String date, String time, int durationMinutes) {
+        String sql = "INSERT INTO time_slot (tutor_name, subject, date, time, duration_minutes, status) " +
+                "VALUES (?, ?, ?, ?, ?, 'available')";
+        jdbc.update(sql, tutorName, subject, date, time, durationMinutes);
+        log.info("New slot added for tutor {}", tutorName);
+    }
+
 }

@@ -23,4 +23,8 @@ public class TimeSlotService {
     public Optional<TimeSlot> getSlotById(Long slotId) {
         return repo.findById(slotId);
     }
+
+    public void addSlot(String tutorName, String subject, String date, String time, int durationMinutes) {
+        repo.addSlot(tutorName, subject, date, time, durationMinutes);
+    }
 }
