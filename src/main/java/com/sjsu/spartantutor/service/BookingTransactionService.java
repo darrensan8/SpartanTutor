@@ -30,7 +30,7 @@ public class BookingTransactionService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public Appointment attemptBooking(Long slotId, String studentName,
-                                      String studentId, String notes) {
+                                      String studentId, String studentEmail, String notes) {
         TimeSlot slot = slotRepo.findByIdWithLock(slotId)
                 .orElseThrow(() -> new IllegalArgumentException("Slot not found: " + slotId));
 
@@ -54,7 +54,7 @@ public class BookingTransactionService {
         Appointment saved = appointmentRepo.save(appointment);
 
         notificationClient.sendBookingConfirmation(
-                studentId + "@sjsu.edu",
+                studentEmail,
                 slot.getTutorName(),
                 slot.getSubject(),
                 slot.getDate(),

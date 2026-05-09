@@ -32,11 +32,11 @@ public class AppointmentService {
         this.slotRepo = slotRepo;
     }
 
-    public Appointment book(Long slotId, String studentName, String studentId, String notes) {
+    public Appointment book(Long slotId, String studentName, String studentId, String studentEmail, String notes) {
         totalBookings++;
         for (int attempt = 0; attempt < MAX_RETRIES; attempt++) {
             try {
-                return bookingTransactionService.attemptBooking(slotId, studentName, studentId, notes);
+                return bookingTransactionService.attemptBooking(slotId, studentName, studentId, studentEmail, notes);
             } catch (CannotAcquireLockException e) {
                 log.warn("Lock conflict on slot {}. Attempt {}/{}", slotId, attempt + 1, MAX_RETRIES);
                 if (attempt == MAX_RETRIES - 1) {

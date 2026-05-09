@@ -42,10 +42,11 @@ public class AppointmentController {
     public String confirmBooking(@RequestParam Long slotId,
                                  @RequestParam String studentName,
                                  @RequestParam String studentId,
+                                 @RequestParam String studentEmail,
                                  @RequestParam(required = false) String notes,
                                  Model model) {
         log.info("Booking slot {} for student {}", slotId, studentName);
-        Appointment appt = appointmentService.book(slotId, studentName, studentId, notes);
+        Appointment appt = appointmentService.book(slotId, studentName, studentId, studentEmail, notes);
         model.addAttribute("appointment", appt);
         return "confirmation";
     }

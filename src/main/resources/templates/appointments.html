@@ -31,7 +31,6 @@
     <h2>My Appointments</h2>
     <a href="/" class="btn-home">&#8592; Back to Home</a>
 
-    <!-- Upcoming Appointments -->
     <h3>Upcoming Appointments</h3>
     <div class="card">
         <table>
@@ -45,11 +44,12 @@
                 <th>Student</th>
                 <th>Status</th>
                 <th>Action</th>
+                <th>Session</th>
             </tr>
             </thead>
             <tbody>
             <tr th:if="${#lists.isEmpty(upcoming)}">
-                <td colspan="8" class="no-appts">No upcoming appointments.</td>
+                <td colspan="9" class="no-appts">No upcoming appointments.</td>
             </tr>
             <tr th:each="appt : ${upcoming}">
                 <td th:text="${appt.appointmentId}"></td>
@@ -67,12 +67,17 @@
                         </button>
                     </form>
                 </td>
+                <td>
+                    <button type="button"
+                            style="background:#0055A2;color:white;border:none;padding:6px 14px;cursor:pointer;">
+                        Join
+                    </button>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
 
-    <!-- Past / Cancelled Appointments -->
     <h3>Past & Cancelled Appointments</h3>
     <div class="card">
         <table>
